@@ -27,12 +27,23 @@ class TheaterSeats extends Model
             $odd_seats = array();
             $even_seats = array();
 
+            /**
+             * 得到所有的奇数列数组
+             */
             for($i=1; $i<=$row;$i++) {
                 $odd_seats[$i] = self::buildSeatsInOneRow($i);
             }
+            /**
+             * 得到所有的欧数列数组，
+             * 最后一排为100，则座位数增加到100后不再增加，
+             * 偶数排比奇数排少一排
+             */
             for($i=1; $i<=$row-1;$i++) {
                 $even_seats[$i] = self::buildSeatsInOneRow($i);
             }
+            /**
+             * 合并奇数列和偶数列并根据座位的数量重新排列
+             */
             $seats = array_merge($odd_seats ,$even_seats);
             usort($seats,array('self','mySort'));
 
@@ -71,6 +82,7 @@ class TheaterSeats extends Model
      * @param $a
      * @param $b
      * @return int
+     * 对比两个数组A和B
      */
     private static function mySort($a,$b)
     {
@@ -85,6 +97,7 @@ class TheaterSeats extends Model
     /**
      * @param $row
      * @return array
+     * 利用等差公式，根据排号计算出没排座位的数量
      */
     private static function buildSeatsInOneRow($row)
     {
@@ -108,9 +121,13 @@ class TheaterSeats extends Model
      * last = 100
      * first = 50
      * d = 2
+     * 剧场座位隔排增加，于是每一个奇数排比之前的奇数排增加2个座位，每一排偶数排比之前的偶数排增加两个座位
+     * 将奇数排和偶数排看做两个不同的等差数列
      * 从50增加到100需要的排数：
      * (last - first)/d+1 = row
-     * 座位隔排递增，实际排数是两倍的row
+     * 因为剧场座位最后一排为100排 假设增加到100排结束，所以奇数排到达100个座位之后，偶数排不再增加
+     * 则剧场所有座位的总排数为
+     * 2*row-1
      */
     private static function getExtensionRow()
     {

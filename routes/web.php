@@ -13,3 +13,4 @@
 
 //Route::get('/', ['as' => 'seats.index', 'uses' => 'UserSeatsController@index']);
 Route::resource('/', 'UserSeatsController');
+Route::get('/show/{email}', 'UserSeatsController@show');
