@@ -6,7 +6,7 @@
         </div>
         <div class="panel-body">
             @if(count($user_seats)<20)
-                <a type="button" class="btn btn-primary" href="/">返回购买晚会票</a>
+                <a type="button" class="btn btn-primary" href="/">返回继续购买晚会票</a>
             @else
                 <div>对不起，您已经购买超过了20张晚会票，无法再继续购买</div>
             @endif
