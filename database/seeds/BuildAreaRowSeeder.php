@@ -14,5 +14,6 @@ class BuildAreaRowSeeder extends Seeder
     {
         //
         TheaterSeats::insertIntoAreaRow();
+
     }
 }

@@ -57,6 +57,7 @@ class TheaterSeats extends Model
     /**
      * 剧场总共有2*getRow-1排
      * 四个区域
+     * 将所有区域和排数插入area_row中
      */
     public static function insertIntoAreaRow()
     {
@@ -64,6 +65,7 @@ class TheaterSeats extends Model
             $areas = ['A','B','C','D'];
             $ext_row = self::getExtensionRow();
             $row = $ext_row*2-1;
+            echo "Start to insert data, please wait.... \n";
             foreach ($areas as $area) {
                 for ($i=1; $i<=$row; $i++) {
                     DB::table('area_row')->insert([
@@ -73,8 +75,34 @@ class TheaterSeats extends Model
                     ]);
                 }
             }
+            echo "area_row_table inserted successfully. \n";
         } catch (\Exception $e) {
-            Log::alert('TheaterSeats::buildAllSeats : '.$e);
+            echo "area_row_table insert failed. \n" .$e;
+            Log::alert('TheaterSeats::insertIntoAreaRow : '.$e);
+        }
+    }
+
+    /**
+     * 将剧场的排数和每排的座位号对应插入row_seats中
+     */
+    public static function insertIntoRowSeats()
+    {
+        try {
+            $row_seats = TheaterSeats::buildAllSeats();
+            echo "Start to insert data, please wait.... \n";
+            foreach ($row_seats as $row => $seats) {
+                foreach ($seats as $seat) {
+                    DB::table('row_seats')->insert([
+                        'row' => $row + 1,
+                        'seat' => $seat,
+                        'created_at' => date('Y-m-d H:i:s'),
+                    ]);
+                }
+            }
+            echo "row_seats_table inserted successfully. \n";
+        } catch (\Exception $e) {
+            echo "row_seats_table insert failed. \n" .$e;
+            Log::alert('TheaterSeats::insertIntoRowSeats : '.$e);
         }
     }
 
